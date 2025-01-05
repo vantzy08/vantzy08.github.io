@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
-    <link rel="icon" href="fifi.jpg" type="image/x-icon">
     <style>
         body {
             margin: 0;
@@ -163,6 +162,13 @@
 
             chatInput.value = '';
             currentUser = currentUser === 'user1' ? 'user2' : 'user1';
+
+            // Trigger notification for incoming message
+            if (currentUser === 'user1') {
+                showNotification('New message from user2!');
+            } else {
+                showNotification('New message from user1!');
+            }
         }
 
         function handleKeyPress(event) {
@@ -182,6 +188,25 @@
                 const messageElement = createMessageElement(msg, idx);
                 chatMessages.appendChild(messageElement);
             });
+        }
+
+        function showNotification(message) {
+            if (!('Notification' in window)) {
+                alert(message);
+            } else if (Notification.permission === 'granted') {
+                new Notification(message);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification(message);
+                    }
+                });
+            }
+        }
+
+        // Request notification permission on page load
+        if ('Notification' in window && Notification.permission !== 'granted') {
+            Notification.requestPermission();
         }
     </script>
 </body>
