@@ -1,1 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="icon" href="fifi.jpg" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #a1c4fd, #c2e9fb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: #4a90e2;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f4f4f8;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 75%;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .message.user1 {
+            background-color: #d1e7ff;
+            align-self: flex-start;
+        }
+
+        .message.user2 {
+            background-color: #ffd1dc;
+            align-self: flex-end;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: transparent;
+            border: none;
+            color: #333;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            color: red;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .chat-input button {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #4a90e2;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background-color: #3b79c6;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Chat App</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = 'user1';
+
+        // Load messages from localStorage
+        window.onload = () => {
+            const savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            const chatMessages = document.getElementById('chatMessages');
+            savedMessages.forEach((msg, index) => {
+                const messageElement = createMessageElement(msg, index);
+                chatMessages.appendChild(messageElement);
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        function createMessageElement(msg, index) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', msg.user);
+            messageElement.textContent = msg.text;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '✖';
+            deleteButton.classList.add('delete-button');
+            deleteButton.onclick = () => deleteMessage(index);
+
+            messageElement.appendChild(deleteButton);
+            return messageElement;
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+            if (message === '') return;
+
+            const chatMessages = document.getElementById('chatMessages');
+            const savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+
+            const newMessage = { user: currentUser, text: message };
+            savedMessages.push(newMessage);
+            localStorage.setItem('chatMessages', JSON.stringify(savedMessages));
+
+            const messageElement = createMessageElement(newMessage, savedMessages.length - 1);
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            chatInput.value = '';
+            currentUser = currentUser === 'user1' ? 'user2' : 'user1';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function deleteMessage(index) {
+            const savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            savedMessages.splice(index, 1);
+            localStorage.setItem('chatMessages', JSON.stringify(savedMessages));
+
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+            savedMessages.forEach((msg, idx) => {
+                const messageElement = createMessageElement(msg, idx);
+                chatMessages.appendChild(messageElement);
+            });
+        }
+    </script>
+</body>
+</html>
