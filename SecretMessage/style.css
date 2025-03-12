@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: #000;
+    overflow: hidden;
+}
+
+h2 {
+    font-size: 3em;
+    text-align: center;
+}
+
+p {
+    font-size: 1.4em;
+    text-align: justify;
+    padding: 50px;
+    margin-bottom: 70px;
+    
+}
+
+.cursor {
+    height: 120px;
+    width: 120px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    z-index: -1;
+}
