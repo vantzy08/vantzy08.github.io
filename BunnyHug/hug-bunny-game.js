@@ -380,7 +380,7 @@ function init() {
   
   elements.button.addEventListener('click', ()=> location.reload())
 
-  new Array(1).fill('').forEach(()=> addBunny())
+  new Array(15).fill('').forEach(()=> addBunny())
   new Array(100).fill('').forEach(()=> addTree())
   updateSadBunnyCount()
 }
