@@ -126,30 +126,21 @@ $(document).ready(function () {
     var sSalam = todaySalam.getSeconds();
     mSalam = checkTime(mSalam);
     sSalam = checkTime(sSalam);
-    if (hSalam < 4) {
-      ucapanSalam = "Selamat Malam Kamu"
-      kata1 = "Jangan tidur malam";
-      kata2 = "Semoga mimpi indah<i class='fa fa-heart'></i>";
-    } else {
       if (hSalam < 11) {
-        ucapanSalam = "Selamat Pagi kamu"
+        ucapanSalam = "Selamat Pagi jieldaa"
         kata1 = "Jangan lupa sarapan";
-        kata2 = "Semoga hari hari mu menyenangkan <i class='fa fa-heart'></i>";
+        kata2 = "Semoga hari hari mu menyenangkan, tetep semangatt okeyyy <i class='fa fa-heart'></i>";
       } else {
         if (hSalam < 16) {
-          ucapanSalam = "Selamat Siang kamu"
+          ucapanSalam = "Selamat Siang jieldaa"
           kata1 = "Jangan lupa makan siang";
-          kata2 = "Jangan lupa shalat dzuhur juga<i class='fa fa-heart'></i>";
+          kata2 = "Jangan terlalu capee yaaa, semangatttt<i class='fa fa-heart'></i>";
         } else {
           if (hSalam < 20) {
             ucapanSalam = "Selamat malam najellyy cantikk😝"
             kata1 = "Jangan lupa mandi yaaa wkwkwk, becandaa gausa dimasukin hati, kalau masuk sendirii yaa ga ikut ikut akuuu wkwkwk";
             kata2 = "Semangatt yaaa jieldaa imutss, jangan bm yaa kakk, nantii kalau bm ntar malah ga nyenyak tidurnya xixi<i class='fa fa-heart'></i>";
-          } else {
-              ucapanSalam = "Selamat Malam Kamu"
-              kata1 = "Jangan tidur malam";
-              kata2 = "Semoga mimpi indah<i class='fa fa-heart'></i>";
-          }
+          } 
         }
       }
     }
