@@ -1,1 +1,171 @@
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heartbeat Monitor</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #111;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+      body:after {
+        background: radial-gradient(transparent, #111);
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .grid {
+        filter: blur(2px);
+        scrollbar-width: none;
+      }
+      .grid:before {
+        background: repeating-linear-gradient(0deg, #2eec71 0, #2eec71 2px, transparent 2px, transparent 40px), repeating-linear-gradient(90deg, #2eec71 0, #2eec71 2px, transparent 2px, transparent 40px);
+        content: '';
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        width: 100vw;
+      }
+      .ekg {
+        left: 50%;
+        max-width: 300px;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .ekg:nth-of-type(1),
+      .ekg:nth-of-type(3) {
+        filter: blur(10px);
+      }
+      @media (min-width: 768px) {
+        .ekg {
+          max-width: 500px;
+        }
+      }
+      .ekg path {
+        -webkit-animation: draw 1s infinite ease-out forwards;
+                animation: draw 1s infinite ease-out forwards;
+        stroke: #2eec71;
+      }
+      .ekg--novelty {
+        display: none;
+      }
+      .ekg--novelty path {
+        -webkit-animation-duration: 1.2s;
+                animation-duration: 1.2s;
+      }
+      label {
+        align-items: center;
+        bottom: 20px;
+        cursor: pointer;
+        display: flex;
+        height: 50px;
+        justify-content: center;
+        position: fixed;
+        right: 50px;
+        width: 50px;
+        z-index: 2;
+      }
+      input {
+        cursor: pointer;
+        margin: 4px;
+        position: fixed;
+        bottom: 36px;
+        right: 40px;
+        z-index: 2;
+      }
+      input:checked ~ .ekg--original {
+        display: none;
+      }
+      input:checked ~ .ekg--novelty {
+        display: block;
+      }
+      @-webkit-keyframes draw {
+        75% {
+          opacity: 1;
+          stroke-dashoffset: 0;
+        }
+        100% {
+          opacity: 0;
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes draw {
+        75% {
+          opacity: 1;
+          stroke-dashoffset: 0;
+        }
+        100% {
+          opacity: 0;
+          stroke-dashoffset: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid"></div>
+    <label for="novelty">❤️</label>
+    <input id="novelty" type="checkbox" checked/><svg
+      class="ekg ekg--original"
+      viewBox="0 0 300 195"
+      preserveAspectRatio="xMinYMin">
+      <g
+        transform="translate(-0.13703948,-768.38124)">
+        <path
+          id="ekg"
+          stroke-dasharray="750"
+          stroke-dashoffset="750"
+          d="m 2.8096902,901.62064 27.8352018,0 29.835201,0 c 9.945067,0 32.20852,-29.26009 43.835197,0 l 15.8352,0 13.39911,23.5426 16.58744,-153.5426 19.3139,188.52018 16.07175,-58.52018 28.48543,0 c 9.15882,-23.20628 26.67189,-23.20628 34.48542,0 l 22.48542,0 26.48543,0"
+          style="fill:none;fill-rule:evenodd;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+      </g>
+    </svg>
+    <svg
+      class="ekg ekg--original"
+      viewBox="0 0 300 195"
+      preserveAspectRatio="xMinYMin">
+      <g
+        transform="translate(-0.13703948,-768.38124)">
+        <path
+          id="ekg"
+          stroke-dasharray="750"
+          stroke-dashoffset="750"
+          d="m 2.8096902,901.62064 27.8352018,0 29.835201,0 c 9.945067,0 32.20852,-29.26009 43.835197,0 l 15.8352,0 13.39911,23.5426 16.58744,-153.5426 19.3139,188.52018 16.07175,-58.52018 28.48543,0 c 9.15882,-23.20628 26.67189,-23.20628 34.48542,0 l 22.48542,0 26.48543,0"
+          style="fill:none;fill-rule:evenodd;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+      </g>
+    </svg>
+    <svg
+      class="ekg ekg--novelty"
+      viewBox="0 0 300 195"
+      preserveAspectRatio="xMinYMin">
+      <g
+        transform="translate(-0.13703948,-768.38124)">
+        <path
+          stroke-dasharray="1000"
+          stroke-dashoffset="1000"
+          d="m 2.8096902,901.62064 15.8352018,0 7.835201,0 c 9.945067,0 26.20852,-29.26009 37.835197,0 l 9.8352,0 15.39911,23.5426 18.58744,-153.5426 17.3139,188.52018 16.07175,-58.52018 22.48543,0 c 9.15882,-23.20628 26.67189,-23.20628 34.48542,0 l 34.48542,0 c -45.2443,-29.26009 -31.19713,-87.95067 5.62136,-47.92825 33.45524,-39.34978 50.19301,15.64125 5.62135,47.92825 l 46.62136,0 6.62136,0"
+          style="fill:none;fill-rule:evenodd;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+      </g>
+    </svg>
+    <svg
+      class="ekg ekg--novelty"
+      viewBox="0 0 300 195"
+      preserveAspectRatio="xMinYMin">
+      <g
+        transform="translate(-0.13703948,-768.38124)">
+        <path
+          stroke-dasharray="1000"
+          stroke-dashoffset="1000"
+          d="m 2.8096902,901.62064 15.8352018,0 7.835201,0 c 9.945067,0 26.20852,-29.26009 37.835197,0 l 9.8352,0 15.39911,23.5426 18.58744,-153.5426 17.3139,188.52018 16.07175,-58.52018 22.48543,0 c 9.15882,-23.20628 26.67189,-23.20628 34.48542,0 l 34.48542,0 c -45.2443,-29.26009 -31.19713,-87.95067 5.62136,-47.92825 33.45524,-39.34978 50.19301,15.64125 5.62135,47.92825 l 46.62136,0 6.62136,0"
+          style="fill:none;fill-rule:evenodd;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+      </g>
+    </svg>
+  </body>
+</html>
