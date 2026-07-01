@@ -1,1 +1,599 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Pola Bilangan - Kelas 8</title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script>
+    window.MathJax = {
+        tex:{
+            inlineMath:[['\\(','\\)']],
+            displayMath:[['$$','$$']]
+        },
+        svg:{
+            fontCache:'global'
+        }
+    };
+    </script>
+
+    <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #ff0844;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body{
+        background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);
+        min-height:100vh;
+        color:var(--dark);
+        display:flex;
+        justify-content:center;
+        align-items:flex-start;
+        overflow-x:hidden;
+        padding:20px;
+        }
+
+        .container{
+        width:100%;
+        max-width:900px;
+        margin:auto;
+        }
+
+        /* Glassmorphism Card */
+        .card{
+        width:100%;
+        background:rgba(255,255,255,.95);
+        backdrop-filter:blur(10px);
+        border-radius:20px;
+        padding:40px;
+        box-shadow:0 15px 35px rgba(0,0,0,.2);
+        text-align:center;
+        position:relative;
+        overflow:hidden;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px; }
+        h2 { font-size: 1.8rem; color: var(--primary); margin-bottom: 20px; }
+        p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #555; }
+
+        /* Floating Animation for Home */
+        .floating-icon {
+            font-size: 4rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--accent) 0%, #ffb199 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 8, 68, 0.3);
+            text-decoration: none;
+            margin: 10px;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 8, 68, 0.5);
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+        .btn-blue:hover { box-shadow: 0 8px 20px rgba(79, 172, 254, 0.5); }
+        .btn-nav { padding: 10px 20px; font-size: 1rem; }
+
+        /* Slides */
+        .slide { display: none; text-align: left; }
+        .slide.active { display: block; animation: fadeIn 0.4s; }
+        .slide-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            border-top: 2px solid var(--light);
+            padding-top: 20px;
+        }
+
+        /* Quiz Options */
+        .quiz-container { text-align: left; }
+        .option {
+            background: var(--light);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            font-weight: 600;
+        }
+        .option:hover { background: #e2e8f0; }
+        .option.correct {
+            background: #d4edda;
+            border-color: var(--success);
+            color: #155724;
+        }
+        .option.wrong {
+            background: #f8d7da;
+            border-color: var(--danger);
+            color: #721c24;
+        }
+        .option.disabled { pointer-events: none; }
+        
+        .feedback {
+            display: none;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            background: #eef2f3;
+            border-left: 5px solid var(--primary);
+        }
+
+        /* Utilities */
+        .badge {
+            background: var(--primary); color: white;
+            padding: 5px 15px; border-radius: 20px;
+            font-size: 0.9rem; margin-bottom: 10px; display: inline-block;
+        }
+        .text-center { text-align: center; }
+
+        /* ===========================
+   RESPONSIVE
+=========================== */
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+mjx-container{
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+
+@media (max-width:768px){
+
+    body{
+        padding:15px;
+    }
+
+    .card{
+        padding:24px 18px;
+        border-radius:18px;
+    }
+
+    h1{
+        font-size:2rem;
+    }
+
+    h2{
+        font-size:1.5rem;
+    }
+
+    p,
+    li{
+        font-size:1rem;
+        line-height:1.7;
+    }
+
+    .floating-icon{
+        font-size:3rem;
+    }
+
+    .btn{
+        width:100%;
+        margin:8px 0;
+        padding:14px;
+        font-size:1rem;
+    }
+
+    .slide-nav{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .btn-nav{
+        width:100%;
+        margin:0;
+    }
+
+    .option{
+        font-size:.95rem;
+        padding:15px;
+    }
+
+    #final-score{
+        font-size:3rem !important;
+    }
+}
+
+@media (max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .card{
+        padding:18px 15px;
+    }
+
+    h1{
+        font-size:1.7rem;
+    }
+
+    h2{
+        font-size:1.25rem;
+    }
+
+    p,
+    li{
+        font-size:.95rem;
+    }
+
+    .badge{
+        font-size:.8rem;
+    }
+
+    .btn{
+        font-size:.95rem;
+    }
+
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        
+        <div id="screen-home" class="screen active">
+            <div class="floating-icon">🚀</div>
+            <h1>Petualangan Matematika</h1>
+            <p>Selamat datang di misi pemecahan <b>Misteri Pola Bilangan</b>. Siapkan dirimu untuk belajar dengan cara yang seru dan interaktif!</p>
+            <button class="btn" onclick="showScreen('screen-menu')">Mulai Petualangan</button>
+        </div>
+
+        <div id="screen-menu" class="screen">
+            <h2>Pilih Misimu 🎯</h2>
+            <p>Pilih modul di bawah ini untuk memulai pembelajaran atau menguji kemampuanmu.</p>
+            <br>
+            <button class="btn btn-blue" onclick="showScreen('screen-materi'); updateMathJax();">📚 Modul Materi</button>
+            <button class="btn" onclick="startQuiz()">🎮 Kuis Interaktif</button>
+            <br><br>
+            <button class="btn btn-nav" style="background: #ccc; box-shadow: none;" onclick="showScreen('screen-home')">🏠 Kembali</button>
+        </div>
+
+        <div id="screen-materi" class="screen">
+            <div class="badge">Materi Pembelajaran</div>
+            
+            <div id="slide-1" class="slide active">
+                <h2>1. Apa itu Pola Bilangan?</h2>
+                <p>Pola bilangan adalah susunan angka-angka yang membentuk suatu aturan tertentu. Jika kita mengetahui aturannya, kita bisa menebak angka berapapun yang muncul pada urutan berikutnya.</p>
+                <p>Urutan angka ini biasa disebut sebagai <b>Suku</b> dan dilambangkan dengan \( U_n \).</p>
+            </div>
+
+            <div id="slide-2" class="slide">
+                <h2>2. Pola Bilangan Dasar</h2>
+                <ul>
+                    <li><b>Pola Ganjil:</b> 1, 3, 5, 7, 9, ...<br>Rumus: \( U_n = 2n - 1 \)</li><br>
+                    <li><b>Pola Genap:</b> 2, 4, 6, 8, 10, ...<br>Rumus: \( U_n = 2n \)</li><br>
+                    <li><b>Pola Persegi:</b> 1, 4, 9, 16, 25, ...<br>Rumus: \( U_n = n^2 \)</li>
+                </ul>
+            </div>
+
+            <div id="slide-3" class="slide">
+                <h2>3. Barisan Aritmetika</h2>
+                <p>Pola bilangan yang memiliki <b>beda (selisih)</b> yang selalu tetap antar sukunya (ditambah atau dikurang).</p>
+                <p><b>Contoh:</b> 3, 7, 11, 15, ... (memiliki beda +4)</p>
+                <div style="background: #f1f2f6; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                    <b>Rumus Umum:</b><br>
+                    $$ U_n = a + (n-1)b $$
+                    <small>\(a\) = suku pertama, \(b\) = beda</small>
+                </div>
+            </div>
+
+            <div id="slide-4" class="slide">
+                <h2>4. Barisan Geometri</h2>
+                <p>Pola bilangan yang memiliki <b>rasio (perbandingan)</b> yang selalu tetap (dikali atau dibagi).</p>
+                <p><b>Contoh:</b> 2, 6, 18, 54, ... (memiliki rasio x3)</p>
+                <div style="background: #f1f2f6; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                    <b>Rumus Umum:</b><br>
+                    $$ U_n = a \cdot r^{n-1} $$
+                    <small>\(a\) = suku pertama, \(r\) = rasio</small>
+                </div>
+            </div>
+
+            <div id="slide-5" class="slide">
+                <h2>5. Pola Fibonacci</h2>
+                <p>Pola unik di mana sebuah angka adalah <b>hasil penjumlahan dari dua angka sebelumnya</b>.</p>
+                <p><b>Contoh:</b> 1, 1, 2, 3, 5, 8, 13, ...</p>
+                <ul>
+                    <li>Angka 2 didapat dari (1 + 1)</li>
+                    <li>Angka 3 didapat dari (1 + 2)</li>
+                    <li>Angka 5 didapat dari (2 + 3)</li>
+                </ul>
+            </div>
+
+            <div class="slide-nav">
+                <button class="btn btn-nav btn-blue" onclick="changeSlide(-1)" id="btn-prev">⬅️ Sebelumnya</button>
+                <button class="btn btn-nav" onclick="showScreen('screen-menu')">🏠 Menu</button>
+                <button class="btn btn-nav btn-blue" onclick="changeSlide(1)" id="btn-next">Selanjutnya ➡️</button>
+            </div>
+        </div>
+
+        <div id="screen-kuis" class="screen">
+            <div class="badge" id="quiz-progress">Soal 1 / 5</div>
+            <div class="quiz-container">
+                <h2 id="question-text">Pertanyaan akan muncul di sini...</h2>
+                <div id="options-container">
+                    </div>
+                <div id="feedback-container" class="feedback">
+                    <h3 id="feedback-title"></h3>
+                    <p id="feedback-text"></p>
+                    <button class="btn btn-nav" onclick="nextQuestion()" style="margin-left: 0; margin-top: 10px;">Lanjut ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-result" class="screen">
+            <div class="floating-icon" id="result-icon">🏆</div>
+            <h2>Kuis Selesai!</h2>
+            <p>Skor Akhir Kamu:</p>
+            <h1 style="font-size: 4rem;" id="final-score">100</h1>
+            <p id="result-message">Luar biasa!</p>
+            <br>
+            <button class="btn btn-blue" onclick="startQuiz()">🔄 Main Lagi</button>
+            <button class="btn" onclick="showScreen('screen-menu')">🏠 Menu Utama</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- Navigation Logic ---
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function updateMathJax() {
+    if (
+        window.MathJax &&
+        typeof MathJax.typesetPromise === "function"
+    ) {
+        MathJax.typesetPromise();
+    }
+}
+
+    // --- Slide Logic ---
+    let currentSlide = 1;
+    const totalSlides = 5;
+
+    function changeSlide(direction) {
+        currentSlide += direction;
+        
+        // Boundaries
+        if (currentSlide < 1) currentSlide = 1;
+        if (currentSlide > totalSlides) currentSlide = totalSlides;
+
+        // Update display
+        document.querySelectorAll('.slide').forEach(el => el.classList.remove('active'));
+        document.getElementById('slide-' + currentSlide).classList.add('active');
+
+        // Button states
+        document.getElementById('btn-prev').style.visibility = (currentSlide === 1) ? 'hidden' : 'visible';
+        document.getElementById('btn-next').style.visibility = (currentSlide === totalSlides) ? 'hidden' : 'visible';
+        
+        updateMathJax();
+    }
+    // Initialize slide buttons on load
+    changeSlide(0); 
+
+    // --- Quiz Logic ---
+    const quizData = [
+        {
+            question: "Perhatikan barisan bilangan berikut: 5, 9, 13, 17, 21, ...<br>Aturan pembentukan pola bilangan tersebut adalah...",
+            options: ["Ditambah 3", "Ditambah 4", "Dikali 2", "Dikuadratkan"],
+            answer: 1, // Index of correct option (B)
+            explanation: "Tiap angka bertambah 4 secara konstan (9-5 = 4, 13-9 = 4). Ini adalah barisan aritmetika dengan beda +4."
+        },
+        {
+            question: "Diketahui sebuah barisan aritmetika: 4, 10, 16, 22, ...<br>Berapakah nilai suku ke-15 (\\( U_{15} \\))?",
+            options: ["82", "84", "88", "94"],
+            answer: 2,
+            explanation: "Suku pertama \\(a = 4\\), beda \\(b = 6\\).<br>\\( U_{15} = a + (15-1)b \\)<br>\\( U_{15} = 4 + (14 \\times 6) = 4 + 84 = 88 \\)."
+        },
+        {
+            question: "Suku ke-8 dari pola bilangan persegi panjang (2, 6, 12, 20, ...) adalah...",
+            options: ["56", "64", "72", "90"],
+            answer: 2,
+            explanation: "Rumus pola persegi panjang adalah \\( U_n = n(n+1) \\).<br>Maka \\( U_8 = 8(8+1) = 8 \\times 9 = 72 \\)."
+        },
+        {
+            question: "Diberikan pola bilangan Fibonacci: 2, 3, 5, 8, \\( x \\), 21, \\( y \\).<br>Nilai \\( x \\) dan \\( y \\) berturut-turut adalah...",
+            options: ["13 dan 34", "12 dan 32", "13 dan 33", "11 dan 34"],
+            answer: 0,
+            explanation: "Fibonacci adalah penjumlahan dua angka sebelumnya.<br>\\( x = 5 + 8 = 13 \\).<br>\\( y = 13 + 21 = 34 \\)."
+        },
+        {
+            question: "Sebuah bakteri membelah diri menjadi 2 setiap 15 menit. Jika awalnya terdapat 5 bakteri, berapakah jumlahnya setelah 1 jam?",
+            options: ["20", "40", "80", "160"],
+            answer: 2,
+            explanation: "1 jam = 60 menit. Bakteri membelah \\(60/15 = 4\\) kali.<br>Barisan Geometri: \\(a = 5, r = 2\\). Suku yang dicari \\(U_5\\).<br>\\(U_5 = 5 \\times 2^4 = 5 \\times 16 = 80\\)."
+        },
+        {
+            question: "Barisan aritmetika memiliki suku pertama 8 dan beda 5. Nilai suku ke-12 adalah...",
+            options: ["58", "60", "63", "65"],
+            answer: 2,
+            explanation: "Gunakan rumus Uₙ = a + (n−1)b.<br>U₁₂ = 8 + (12−1)×5 = 8 + 55 = 63."
+        },
+        {
+            question: "Perhatikan pola berikut:<br>4, 8, 16, 32, ...<br>Rasio dari barisan tersebut adalah...",
+            options: ["2", "4", "8", "16"],
+            answer: 0,
+            explanation: "Setiap suku dikali 2 sehingga rasionya adalah 2."
+        },
+        {
+            question: "Suku ke-10 dari pola bilangan ganjil adalah...",
+            options: ["17", "18", "19", "21"],
+            answer: 2,
+            explanation: "Rumus bilangan ganjil adalah Uₙ = 2n − 1.<br>U₁₀ = 2×10 −1 = 19."
+        },
+        {
+            question: "Perhatikan pola berikut:<br>1, 4, 9, 16, 25, ...<br>Bilangan berikutnya adalah...",
+            options: ["30", "35", "36", "49"],
+            answer: 2,
+            explanation: "Pola tersebut adalah bilangan kuadrat.<br>6² = 36."
+        },
+        {
+            question: "Sebuah barisan geometri mempunyai suku pertama 3 dan rasio 3. Nilai suku ke-6 adalah...",
+            options: ["243", "486", "729", "972"],
+            answer: 0,
+            explanation: "U₆ = 3 × 3⁵ = 3 × 243 ÷ 3 = 243."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        showScreen('screen-kuis');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        // Reset feedback
+        document.getElementById('feedback-container').style.display = 'none';
+        
+        const qData = quizData[currentQuestionIndex];
+        document.getElementById('quiz-progress').innerText = `Soal ${currentQuestionIndex + 1} / ${quizData.length}`;
+        document.getElementById('question-text').innerHTML = qData.question;
+        
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = ''; // Clear previous options
+        
+        qData.options.forEach((opt, index) => {
+            const optDiv = document.createElement('div');
+            optDiv.className = 'option';
+            optDiv.innerHTML = `${String.fromCharCode(65 + index)}. ${opt}`;
+            optDiv.onclick = () => selectOption(index, optDiv);
+            optionsContainer.appendChild(optDiv);
+        });
+
+        updateMathJax();
+    }
+
+    function selectOption(selectedIndex, optElement) {
+        // Disable all options
+        const allOptions = document.querySelectorAll('.option');
+        allOptions.forEach(el => el.classList.add('disabled'));
+
+        const qData = quizData[currentQuestionIndex];
+        const isCorrect = selectedIndex === qData.answer;
+
+        if (isCorrect) {
+            optElement.classList.add('correct');
+            score += 10; // 5 questions * 20 = 100 max score
+            document.getElementById('feedback-title').innerHTML = "🎉 Jawaban Benar!";
+            document.getElementById('feedback-title').style.color = "var(--success)";
+        } else {
+            optElement.classList.add('wrong');
+            // Highlight the correct one
+            allOptions[qData.answer].classList.add('correct');
+            document.getElementById('feedback-title').innerHTML = "💡 Yah, Kurang Tepat!";
+            document.getElementById('feedback-title').style.color = "var(--danger)";
+        }
+
+        document.getElementById('feedback-text').innerHTML = qData.explanation;
+        document.getElementById('feedback-container').style.display = 'block';
+        
+        updateMathJax();
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        showScreen('screen-result');
+        document.getElementById('final-score').innerText = score;
+        
+        let message = "";
+        let icon = "🏆";
+        if (score === 100) {
+        message = "Luar biasa! Semua jawaban benar. Kamu benar-benar menguasai materi Pola Bilangan!";
+        icon = "🌟";
+    } else if (score >= 80) {
+        message = "Sangat baik! Pemahamanmu sudah sangat bagus.";
+        icon = "🏆";
+    } else if (score >= 60) {
+        message = "Bagus! Terus berlatih agar hasilmu semakin maksimal.";
+        icon = "👍";
+    } else if (score >= 40) {
+        message = "Cukup baik. Pelajari kembali materi dan coba lagi.";
+        icon = "📚";
+    } else {
+        message = "Jangan menyerah! Baca kembali materi, lalu ulangi kuisnya.";
+        icon = "💪";
+    }
+        
+        document.getElementById('result-message').innerText = message;
+        document.getElementById('result-icon').innerText = icon;
+    }
+
+</script>
+
+</body>
+</html>
