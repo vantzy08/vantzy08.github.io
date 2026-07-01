@@ -6,9 +6,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    <script>
+    window.MathJax = {
+        tex:{
+            inlineMath:[['\\(','\\)']],
+            displayMath:[['$$','$$']]
+        },
+        svg:{
+            fontCache:'global'
+        }
+    };
     </script>
+
+    <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
         :root {
@@ -28,32 +39,34 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        body {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            min-height: 100vh;
-            color: var(--dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
+        body{
+        background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);
+        min-height:100vh;
+        color:var(--dark);
+        display:flex;
+        justify-content:center;
+        align-items:flex-start;
+        overflow-x:hidden;
+        padding:20px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
+        .container{
+        width:100%;
+        max-width:900px;
+        margin:auto;
         }
 
         /* Glassmorphism Card */
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .card{
+        width:100%;
+        background:rgba(255,255,255,.95);
+        backdrop-filter:blur(10px);
+        border-radius:20px;
+        padding:40px;
+        box-shadow:0 15px 35px rgba(0,0,0,.2);
+        text-align:center;
+        position:relative;
+        overflow:hidden;
         }
 
         /* Screens */
@@ -167,6 +180,110 @@
             font-size: 0.9rem; margin-bottom: 10px; display: inline-block;
         }
         .text-center { text-align: center; }
+
+        /* ===========================
+   RESPONSIVE
+=========================== */
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+mjx-container{
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+
+@media (max-width:768px){
+
+    body{
+        padding:15px;
+    }
+
+    .card{
+        padding:24px 18px;
+        border-radius:18px;
+    }
+
+    h1{
+        font-size:2rem;
+    }
+
+    h2{
+        font-size:1.5rem;
+    }
+
+    p,
+    li{
+        font-size:1rem;
+        line-height:1.7;
+    }
+
+    .floating-icon{
+        font-size:3rem;
+    }
+
+    .btn{
+        width:100%;
+        margin:8px 0;
+        padding:14px;
+        font-size:1rem;
+    }
+
+    .slide-nav{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .btn-nav{
+        width:100%;
+        margin:0;
+    }
+
+    .option{
+        font-size:.95rem;
+        padding:15px;
+    }
+
+    #final-score{
+        font-size:3rem !important;
+    }
+}
+
+@media (max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .card{
+        padding:18px 15px;
+    }
+
+    h1{
+        font-size:1.7rem;
+    }
+
+    h2{
+        font-size:1.25rem;
+    }
+
+    p,
+    li{
+        font-size:.95rem;
+    }
+
+    .badge{
+        font-size:.8rem;
+    }
+
+    .btn{
+        font-size:.95rem;
+    }
+
+}
     </style>
 </head>
 <body>
@@ -285,10 +402,13 @@
     }
 
     function updateMathJax() {
-        if(window.MathJax) {
-            MathJax.typesetPromise();
-        }
+    if (
+        window.MathJax &&
+        typeof MathJax.typesetPromise === "function"
+    ) {
+        MathJax.typesetPromise();
     }
+}
 
     // --- Slide Logic ---
     let currentSlide = 1;
@@ -345,6 +465,36 @@
             options: ["20", "40", "80", "160"],
             answer: 2,
             explanation: "1 jam = 60 menit. Bakteri membelah \\(60/15 = 4\\) kali.<br>Barisan Geometri: \\(a = 5, r = 2\\). Suku yang dicari \\(U_5\\).<br>\\(U_5 = 5 \\times 2^4 = 5 \\times 16 = 80\\)."
+        },
+        {
+            question: "Barisan aritmetika memiliki suku pertama 8 dan beda 5. Nilai suku ke-12 adalah...",
+            options: ["58", "60", "63", "65"],
+            answer: 2,
+            explanation: "Gunakan rumus Uₙ = a + (n−1)b.<br>U₁₂ = 8 + (12−1)×5 = 8 + 55 = 63."
+        },
+        {
+            question: "Perhatikan pola berikut:<br>4, 8, 16, 32, ...<br>Rasio dari barisan tersebut adalah...",
+            options: ["2", "4", "8", "16"],
+            answer: 0,
+            explanation: "Setiap suku dikali 2 sehingga rasionya adalah 2."
+        },
+        {
+            question: "Suku ke-10 dari pola bilangan ganjil adalah...",
+            options: ["17", "18", "19", "21"],
+            answer: 2,
+            explanation: "Rumus bilangan ganjil adalah Uₙ = 2n − 1.<br>U₁₀ = 2×10 −1 = 19."
+        },
+        {
+            question: "Perhatikan pola berikut:<br>1, 4, 9, 16, 25, ...<br>Bilangan berikutnya adalah...",
+            options: ["30", "35", "36", "49"],
+            answer: 2,
+            explanation: "Pola tersebut adalah bilangan kuadrat.<br>6² = 36."
+        },
+        {
+            question: "Sebuah barisan geometri mempunyai suku pertama 3 dan rasio 3. Nilai suku ke-6 adalah...",
+            options: ["243", "486", "729", "972"],
+            answer: 0,
+            explanation: "U₆ = 3 × 3⁵ = 3 × 243 ÷ 3 = 243."
         }
     ];
 
@@ -390,7 +540,7 @@
 
         if (isCorrect) {
             optElement.classList.add('correct');
-            score += 20; // 5 questions * 20 = 100 max score
+            score += 10; // 5 questions * 20 = 100 max score
             document.getElementById('feedback-title').innerHTML = "🎉 Jawaban Benar!";
             document.getElementById('feedback-title').style.color = "var(--success)";
         } else {
@@ -423,36 +573,27 @@
         let message = "";
         let icon = "🏆";
         if (score === 100) {
-            message = "Sempurna! Kamu adalah master Pola Bilangan!";
-            icon = "🌟";
-        } else if (score >= 60) {
-            message = "Kerja bagus! Sedikit latihan lagi kamu pasti bisa sempurna.";
-            icon = "👍";
-        } else {
-            message = "Jangan menyerah! Coba baca kembali materi dan ulangi kuisnya.";
-            icon = "💪";
-        }
+        message = "Luar biasa! Semua jawaban benar. Kamu benar-benar menguasai materi Pola Bilangan!";
+        icon = "🌟";
+    } else if (score >= 80) {
+        message = "Sangat baik! Pemahamanmu sudah sangat bagus.";
+        icon = "🏆";
+    } else if (score >= 60) {
+        message = "Bagus! Terus berlatih agar hasilmu semakin maksimal.";
+        icon = "👍";
+    } else if (score >= 40) {
+        message = "Cukup baik. Pelajari kembali materi dan coba lagi.";
+        icon = "📚";
+    } else {
+        message = "Jangan menyerah! Baca kembali materi, lalu ulangi kuisnya.";
+        icon = "💪";
+    }
         
         document.getElementById('result-message').innerText = message;
         document.getElementById('result-icon').innerText = icon;
     }
 
 </script>
-
-<script>
-window.MathJax = {
-    tex: {
-        inlineMath: [['\\(', '\\)']],
-        displayMath: [['$$', '$$']]
-    },
-    svg: {
-        fontCache: 'global'
-    }
-};
-</script>
-
-<script id="MathJax-script" async
-src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 </body>
 </html>
